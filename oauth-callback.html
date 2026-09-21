@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oura OAuth callback</title>
+<style>
+body{font-family:system-ui,-apple-system,sans-serif;max-width:40rem;margin:2rem auto;padding:0 1rem;line-height:1.5}
+code,pre{background:#f4f4f4;padding:.2rem .4rem;border-radius:4px;word-break:break-all}
+pre{padding:1rem;overflow:auto}
+</style>
+</head>
+<body>
+<h1>Oura OAuth callback</h1>
+<p id="status">Reading redirect…</p>
+<pre id="out"></pre>
+<script>
+const params = new URLSearchParams(location.search);
+const code = params.get("code");
+const error = params.get("error");
+const state = params.get("state");
+const el = document.getElementById("out");
+const status = document.getElementById("status");
+if (error) {
+  status.textContent = "Authorization failed";
+  el.textContent = error + (params.get("error_description") ? "\n" + params.get("error_description") : "");
+} else if (code) {
+  status.textContent = "Success — copy this authorization code back to Grok Bot:";
+  el.textContent = code;
+  if (state) el.textContent += "\n\nstate: " + state;
+} else {
+  status.textContent = "No code in URL. This page is only useful as an OAuth redirect target.";
+}
+</script>
+</body>
+</html>
